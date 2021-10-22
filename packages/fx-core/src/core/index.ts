@@ -264,22 +264,22 @@ export class FxCore implements Core {
         if (scaffoldSourceCodeRes.isErr()) {
           return err(scaffoldSourceCodeRes.error);
         }
-        const generateResourceTemplateRes = await solution.generateResourceTemplate(
-          contextV2,
-          inputs
-        );
-        if (generateResourceTemplateRes.isErr()) {
-          return err(generateResourceTemplateRes.error);
-        }
+        // const generateResourceTemplateRes = await solution.generateResourceTemplate(
+        //   contextV2,
+        //   inputs
+        // );
+        // if (generateResourceTemplateRes.isErr()) {
+        //   return err(generateResourceTemplateRes.error);
+        // }
         // ctx.provisionInputConfig = generateResourceTemplateRes.value;
         if (multiEnv) {
-          if (solution.createEnv) {
-            inputs.copy = false;
-            const createEnvRes = await solution.createEnv(contextV2, inputs);
-            if (createEnvRes.isErr()) {
-              return err(createEnvRes.error);
-            }
-          }
+          // if (solution.createEnv) {
+          //   inputs.copy = false;
+          //   const createEnvRes = await solution.createEnv(contextV2, inputs);
+          //   if (createEnvRes.isErr()) {
+          //     return err(createEnvRes.error);
+          //   }
+          // }
         } else {
           //TODO lagacy env.default.json
           const state: Json = { solution: {} };

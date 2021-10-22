@@ -19,7 +19,7 @@ import {
   v2,
 } from "@microsoft/teamsfx-api";
 import Container from "typedi";
-import { getStrings } from "../../../../common";
+import { deepCopy, getStrings } from "../../../../common";
 import { checkSubscription } from "../commonQuestions";
 import { CancelError, SolutionError, SolutionSource } from "../constants";
 import {
@@ -41,6 +41,7 @@ import {
   MessageExtensionItem,
   ProgrammingLanguageQuestion,
   TabOptionItem,
+  WebFrameworkQuestion,
 } from "../question";
 import {
   getAllV2ResourcePluginMap,
@@ -66,31 +67,15 @@ export async function getQuestionsForScaffolding(
   node.addChild(capNode);
 
   // 1.1 hostType
-  const hostTypeNode = new QTreeNode(FrontendHostTypeQuestion);
-  hostTypeNode.condition = { contains: TabOptionItem.id };
-  capNode.addChild(hostTypeNode);
+  const webFrameworkNode = new QTreeNode(deepCopy(WebFrameworkQuestion));
+  webFrameworkNode.condition = { contains: TabOptionItem.id };
+  capNode.addChild(webFrameworkNode);
 
-  // 1.1.1 SPFX Tab
-  const spfxPlugin: v2.ResourcePlugin = Container.get<v2.ResourcePlugin>(
-    ResourcePluginsV2.SpfxPlugin
-  );
-  if (spfxPlugin.getQuestionsForScaffolding) {
-    const res = await spfxPlugin.getQuestionsForScaffolding(ctx, inputs);
-    if (res.isErr()) return res;
-    if (res.value) {
-      const spfxNode = res.value as QTreeNode;
-      spfxNode.condition = { equals: HostTypeOptionSPFx.id };
-      if (spfxNode.data) hostTypeNode.addChild(spfxNode);
+  const plugins = getAllV2ResourcePlugins().filter((p) => p.extendQuestionsForScaffold);
+  for (const plugin of plugins) {
+    if (plugin.extendQuestionsForScaffold) {
+      plugin.extendQuestionsForScaffold(ctx, inputs, webFrameworkNode);
     }
-  }
-
-  // 1.1.2 Azure Tab
-  const tabRes = await getTabScaffoldQuestionsV2(ctx, inputs, true);
-  if (tabRes.isErr()) return tabRes;
-  if (tabRes.value) {
-    const tabNode = tabRes.value;
-    tabNode.condition = { equals: HostTypeOptionAzure.id };
-    hostTypeNode.addChild(tabNode);
   }
 
   // 1.2 Bot

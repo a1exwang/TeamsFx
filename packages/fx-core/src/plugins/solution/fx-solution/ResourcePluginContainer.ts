@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-import { v2, AzureSolutionSettings, Plugin, returnUserError } from "@microsoft/teamsfx-api";
+import { AzureSolutionSettings, Plugin, returnUserError, v2 } from "@microsoft/teamsfx-api";
 import "reflect-metadata";
 import { Container } from "typedi";
 import { SolutionError, SolutionSource } from "./constants";
@@ -31,6 +31,7 @@ export const ResourcePluginsV2 = {
   ApimPlugin: "ApimPluginV2",
   AppStudioPlugin: "AppStudioPluginV2",
   SimpleAuthPlugin: "SimpleAuthPluginV2",
+  MyTestPlugin: "MyTestPlugin",
 };
 
 /**

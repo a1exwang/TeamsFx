@@ -55,6 +55,8 @@ export interface AzureSolutionSettings extends SolutionSettings {
     hostType: string;
     // (undocumented)
     migrateFromV1?: boolean;
+    // (undocumented)
+    webFramework?: string;
 }
 
 // @public
@@ -1068,6 +1070,7 @@ interface ResourcePlugin {
     displayName: string;
     // (undocumented)
     executeUserTask?: (ctx: Context_2, inputs: Inputs, func: Func, localSettings: Json, envInfo: EnvInfoV2, tokenProvider: TokenProvider) => Promise<Result<unknown, FxError>>;
+    extendQuestionsForScaffold?: (ctx: Context_2, inputs: Inputs, node: QTreeNode) => Promise<Result<Void, FxError>>;
     generateResourceTemplate?: (ctx: Context_2, inputs: Inputs) => Promise<Result<ResourceTemplate_2, FxError>>;
     // (undocumented)
     getQuestions?: (ctx: Context_2, inputs: Inputs, envInfo: DeepReadonly<EnvInfoV2>, tokenProvider: TokenProvider) => Promise<Result<QTreeNode | undefined, FxError>>;
@@ -1317,8 +1320,11 @@ export enum Stage {
 // @public (undocumented)
 export const StatesFolderName = "states";
 
+// @public (undocumented)
+export type StaticOption = string | OptionItem;
+
 // @public
-export type StaticOptions = string[] | OptionItem[];
+export type StaticOptions = StaticOption[];
 
 // @public (undocumented)
 export const StaticPlatforms: Platform[];

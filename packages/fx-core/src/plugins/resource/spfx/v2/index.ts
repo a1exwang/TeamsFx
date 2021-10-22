@@ -7,13 +7,21 @@ import {
   FxError,
   Inputs,
   Json,
+  ok,
   QTreeNode,
   Result,
+  SingleSelectQuestion,
   Void,
 } from "@microsoft/teamsfx-api";
 import { Context, DeploymentInputs, ResourcePlugin } from "@microsoft/teamsfx-api/build/v2";
 import { Inject, Service } from "typedi";
-import { SpfxPlugin } from "../..";
+import {
+  SpfxFrameworkQuestion,
+  SpfxPlugin,
+  SpfxWebpartDespQuestion,
+  SpfxWebpartQuestion,
+} from "../..";
+import { HostTypeOptionSPFx, WebFrameworkQuestion } from "../../../solution/fx-solution/question";
 import {
   ResourcePlugins,
   ResourcePluginsV2,
@@ -32,7 +40,8 @@ export class SpfxPluginV2 implements ResourcePlugin {
   plugin!: SpfxPlugin;
 
   activate(solutionSettings: AzureSolutionSettings): boolean {
-    return this.plugin.activate(solutionSettings);
+    // return this.plugin.activate(solutionSettings);
+    return solutionSettings.webFramework === HostTypeOptionSPFx.id;
   }
 
   async getQuestionsForScaffolding(
@@ -41,7 +50,25 @@ export class SpfxPluginV2 implements ResourcePlugin {
   ): Promise<Result<QTreeNode | undefined, FxError>> {
     return await getQuestionsForScaffoldingAdapter(ctx, inputs, this.plugin);
   }
-
+  async extendQuestionsForScaffold(
+    ctx: Context,
+    inputs: Inputs,
+    node: QTreeNode
+  ): Promise<Result<Void, FxError>> {
+    if (node.data.type === "singleSelect" && node.data.name === WebFrameworkQuestion.name) {
+      const question = node.data as SingleSelectQuestion;
+      question.staticOptions.push(HostTypeOptionSPFx);
+      const group = new QTreeNode({
+        type: "group",
+      });
+      group.condition = { equals: HostTypeOptionSPFx.id };
+      group.addChild(new QTreeNode(SpfxFrameworkQuestion));
+      group.addChild(new QTreeNode(SpfxWebpartQuestion));
+      group.addChild(new QTreeNode(SpfxWebpartDespQuestion));
+      node.addChild(group);
+    }
+    return ok(Void);
+  }
   async scaffoldSourceCode(ctx: Context, inputs: Inputs): Promise<Result<Void, FxError>> {
     return await scaffoldSourceCodeAdapter(ctx, inputs, this.plugin);
   }

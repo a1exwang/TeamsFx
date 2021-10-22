@@ -27,6 +27,7 @@ import {
   AzureSolutionQuestionNames,
   BotOptionItem,
   HostTypeOptionAzure,
+  HostTypeOptionSPFx,
   MessageExtensionItem,
   TabOptionItem,
 } from "../question";
@@ -198,18 +199,15 @@ export function fillInSolutionSettings(
   let hostType = answers[AzureSolutionQuestionNames.HostType] as string;
   if (capabilities.includes(BotOptionItem.id) || capabilities.includes(MessageExtensionItem.id))
     hostType = HostTypeOptionAzure.id;
-  if (!hostType) {
-    return err(
-      returnSystemError(
-        new Error("hostType is undefined"),
-        SolutionSource,
-        SolutionError.InternelError
-      )
-    );
-  }
-  solutionSettings.hostType = hostType;
   let azureResources: string[] | undefined;
-  if (hostType === HostTypeOptionAzure.id && capabilities.includes(TabOptionItem.id)) {
+  if (capabilities.includes(TabOptionItem.id)) {
+    const webFramework = answers[AzureSolutionQuestionNames.WebFramework];
+    solutionSettings.webFramework = webFramework;
+    if (webFramework === HostTypeOptionSPFx.id) {
+      hostType = HostTypeOptionSPFx.id;
+    } else {
+      hostType = HostTypeOptionAzure.id;
+    }
     azureResources = answers[AzureSolutionQuestionNames.AzureResources] as string[];
     if (azureResources) {
       if (
@@ -221,6 +219,16 @@ export function fillInSolutionSettings(
       }
     } else azureResources = [];
   }
+  if (!hostType) {
+    return err(
+      returnSystemError(
+        new Error("hostType is undefined"),
+        SolutionSource,
+        SolutionError.InternelError
+      )
+    );
+  }
+  solutionSettings.hostType = hostType;
   solutionSettings.azureResources = azureResources || [];
   solutionSettings.capabilities = capabilities || [];
   return ok(Void);

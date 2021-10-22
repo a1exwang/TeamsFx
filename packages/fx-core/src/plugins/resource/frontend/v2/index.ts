@@ -8,7 +8,12 @@ import {
   FxError,
   Inputs,
   Json,
+  ok,
+  OptionItem,
+  QTreeNode,
   Result,
+  SingleSelectQuestion,
+  StaticOptions,
   TokenProvider,
   v2,
   Void,
@@ -21,8 +26,10 @@ import {
   ResourceProvisionOutput,
   ResourceTemplate,
 } from "@microsoft/teamsfx-api/build/v2";
+import { StaticOption } from "@microsoft/teamsfx-api/src/qm/question";
 import { Inject, Service } from "typedi";
 import { FrontendPlugin } from "../..";
+import { WebFrameworkQuestion } from "../../../solution/fx-solution/question";
 import {
   ResourcePlugins,
   ResourcePluginsV2,
@@ -44,7 +51,7 @@ export class FrontendPluginV2 implements ResourcePlugin {
   plugin!: FrontendPlugin;
 
   activate(solutionSettings: AzureSolutionSettings): boolean {
-    return this.plugin.activate(solutionSettings);
+    return solutionSettings.webFramework === "React";
   }
 
   async scaffoldSourceCode(ctx: Context, inputs: Inputs): Promise<Result<Void, FxError>> {
@@ -102,5 +109,22 @@ export class FrontendPluginV2 implements ResourcePlugin {
       tokenProvider,
       this.plugin
     );
+  }
+
+  async extendQuestionsForScaffold(
+    ctx: Context,
+    inputs: Inputs,
+    node: QTreeNode
+  ): Promise<Result<Void, FxError>> {
+    if (node.data.type === "singleSelect" && node.data.name === WebFrameworkQuestion.name) {
+      const question = node.data as SingleSelectQuestion;
+      const item: StaticOption = {
+        id: "React",
+        label: "React web",
+        cliName: "react",
+      };
+      question.staticOptions.push(item);
+    }
+    return ok(Void);
   }
 }

@@ -63,13 +63,6 @@ export class ApimPluginV2 implements ResourcePlugin {
     return await getQuestionsAdapter(ctx, inputs, envInfo, tokenProvider, this.plugin);
   }
 
-  async getQuestionsForScaffolding(
-    ctx: Context,
-    inputs: Inputs
-  ): Promise<Result<QTreeNode | undefined, FxError>> {
-    return await getQuestionsForScaffoldingAdapter(ctx, inputs, this.plugin);
-  }
-
   async getQuestionsForUserTask(
     ctx: Context,
     inputs: Inputs,

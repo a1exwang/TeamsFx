@@ -61,12 +61,14 @@ export interface OptionItem {
   cliName?: string;
 }
 
+export type StaticOption = string | OptionItem;
+
 /**
  * static option is `string` array or `OptionItem` array.
  * If the option is a string array, each element of which will be converted to an `OptionItem` object with `id` and `label` field equal to the string element.
  * For example, option=['id1','id2'] => [{'id':'id1', label:'id1'},{'id':'id2', label:'id2'}].
  */
-export type StaticOptions = string[] | OptionItem[];
+export type StaticOptions = StaticOption[];
 
 /**
  * dynamic option is defined by a function

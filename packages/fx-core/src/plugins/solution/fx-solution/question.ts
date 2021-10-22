@@ -49,6 +49,7 @@ export enum AzureSolutionQuestionNames {
   AppName = "app-name",
   AskSub = "subscription",
   ProgrammingLanguage = "programming-language",
+  WebFramework = "web-framework",
 }
 
 export const HostTypeOptionAzure: OptionItem = {
@@ -256,4 +257,11 @@ export const GetUserEmailQuestion: TextInputQuestion = {
       return undefined;
     },
   },
+};
+
+export const WebFrameworkQuestion: SingleSelectQuestion = {
+  name: AzureSolutionQuestionNames.WebFramework,
+  type: "singleSelect",
+  title: "Web framework",
+  staticOptions: [],
 };

@@ -245,4 +245,13 @@ export interface ResourcePlugin {
     envInfo: DeepReadonly<EnvInfoV2>,
     tokenProvider: TokenProvider
   ) => Promise<Result<QTreeNode | undefined, FxError>>;
+
+  /**
+   * extend questions for scaffolding, plugin can modify existing question node or add child questions
+   */
+  extendQuestionsForScaffold?: (
+    ctx: Context,
+    inputs: Inputs,
+    node: QTreeNode
+  ) => Promise<Result<Void, FxError>>;
 }
