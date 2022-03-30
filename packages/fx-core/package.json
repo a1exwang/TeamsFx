@@ -40,6 +40,8 @@
     "test:core:other": "nyc mocha \"tests/core/other.test.ts\"",
     "clean": "rm -rf build",
     "build": "rimraf build && npx tsc -p ./",
+    "build-quick": "tsc -b -v tsconfig-quick.json",
+    "build-quick-clean": "rimraf build",
     "lint:fix": "eslint --fix \"src/**/*.ts\" \"tests/**/*.ts\"",
     "postbuild": "node ./scripts/download-templates-zip.js $(git tag --list)",
     "prepublishOnly": "npm run test:unit -- check-coverage --lines 0 && npm run build",

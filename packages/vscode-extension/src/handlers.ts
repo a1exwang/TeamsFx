@@ -2261,7 +2261,7 @@ export async function openPreviewManifest(args: any[]): Promise<Result<any, FxEr
     return err(error);
   }
 }
-export async function openConfigStateFile(args: any[]) {
+export async function openConfigStateFile(args: any[]): Promise<any> {
   ExtTelemetry.sendTelemetryEvent(TelemetryEvent.OpenManifestConfigStateStart);
   const workspacePath = getWorkspacePath();
   if (!workspacePath) {
@@ -2367,7 +2367,7 @@ export async function openConfigStateFile(args: any[]) {
   });
 }
 
-export async function updatePreviewManifest(args: any[]) {
+export async function updatePreviewManifest(args: any[]): Promise<any> {
   ExtTelemetry.sendTelemetryEvent(
     TelemetryEvent.UpdatePreviewManifestStart,
     getTriggerFromProperty(args && args.length > 1 ? [args[1]] : undefined)

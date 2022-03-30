@@ -15,10 +15,37 @@
         "${workspaceFolder}/../fx-core/build/**/*.js",
         "${workspaceFolder}/../api/build/**/*.js"
       ],
+      "skipFiles": [
+        "<node_internals>/**/*.js"
+      ],
       "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
+        "TEAMSFX_DEBUG_TEMPLATE": "true",
+        "TEAMSFX_M365_APP": "true",
+        "BOT_NOTIFICATION_ENABLED": "true",
       },
       "preLaunchTask": "npm: build"
+    },
+    {
+      "name": "Run Extension Quick",
+      "type": "pwa-extensionHost",
+      "request": "launch",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/out/**/*.js",
+        "${workspaceFolder}/../fx-core/build/**/*.js",
+        "${workspaceFolder}/../api/build/**/*.js"
+      ],
+      "skipFiles": [
+        "<node_internals>/**/*.js"
+      ],
+      "env": {
+        "NODE_ENV": "development",
+        "TEAMSFX_DEBUG_TEMPLATE": "true",
+        "TEAMSFX_M365_APP": "true",
+        "BOT_NOTIFICATION_ENABLED": "true",
+      },
+      "preLaunchTask": "npm: build-quick"
     },
     {
       "name": "Run Extension with Failpoints",
@@ -43,7 +70,9 @@
         "--extensionDevelopmentPath=${workspaceFolder}",
         "--extensionTestsPath=${workspaceFolder}/out/test/unit/index"
       ],
-      "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
+      "outFiles": [
+        "${workspaceFolder}/out/test/**/*.js"
+      ],
       "preLaunchTask": "npm: test-watch"
     },
     {
@@ -54,7 +83,10 @@
         "--extensionDevelopmentPath=${workspaceFolder}",
         "--extensionTestsPath=${workspaceFolder}/out/test/integration/envChecker/index"
       ],
-      "outFiles": ["${workspaceFolder}/out/src/**/*.js", "${workspaceFolder}/out/test/**/*.js"],
+      "outFiles": [
+        "${workspaceFolder}/out/src/**/*.js",
+        "${workspaceFolder}/out/test/**/*.js"
+      ],
       "preLaunchTask": "npm: test-watch",
       "sourceMaps": true
     }
